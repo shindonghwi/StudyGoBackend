@@ -16,9 +16,9 @@ type config struct {
 }
 
 type AppStatus struct {
-	Status      string // 상태
-	Environment string // 환경 ( dev, prod )
-	Version     string // 현재 버전
+	Status      string `json:"status"`      // 상태
+	Environment string `json:"environment"` // 환경 ( dev, prod )
+	Version     string `json:"version" `    // 현재 버전
 }
 
 func main() {
