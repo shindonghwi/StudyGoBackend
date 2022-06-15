@@ -40,15 +40,17 @@ func main() {
 			Version:     version,
 		}
 
+		// MarshalIndent는 가독성을 높이기 위해서 사용한다. prefix, 들여쓰기 문자 설정
 		js, err := json.MarshalIndent(currentStatus, "", "'\t")
 
+		// 에러가 발생하면 종료
 		if err != nil {
 			log.Println(err)
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(js)
+		w.Header().Set("Content-Type", "application/json") // Header 설정
+		w.WriteHeader(http.StatusOK)                       // 응답상태 설정
+		w.Write(js)                                        // 응답 모델 추가
 	})
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", cfg.port), nil); err != nil {
