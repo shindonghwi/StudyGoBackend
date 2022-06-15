@@ -1,11 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"flag" // flag는 cmd에서 옵션을 지정할 수 있는 방법 중의 하나임.
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
 const version string = "1.0.0"
@@ -21,6 +22,11 @@ type AppStatus struct {
 	Version     string `json:"version" `    // 현재 버전
 }
 
+type application struct {
+	config config
+	logger *log.Logger
+}
+
 func main() {
 
 	var cfg config
@@ -29,31 +35,28 @@ func main() {
 	flag.StringVar(&cfg.env, "env", "development", "Application environment (development|production")
 	flag.Parse()
 
-	fmt.Println("Running: ", cfg.port, cfg.env)
+	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	// HandleFunc ( 수신할 경로, 핸들러 함수, http 포인터 )
-	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
-		// fmt.Fprint(w, "status")
-		currentStatus := AppStatus{
-			Status:      "Available",
-			Environment: cfg.env,
-			Version:     version,
-		}
+	app := &application{
+		config: cfg,
+		logger: logger,
+	}
 
-		// MarshalIndent는 가독성을 높이기 위해서 사용한다. prefix, 들여쓰기 문자 설정
-		js, err := json.MarshalIndent(currentStatus, "", "'\t")
+	app.routes()
 
-		// 에러가 발생하면 종료
-		if err != nil {
-			log.Println(err)
-		}
+	srv := &http.Server{
+		Addr:         fmt.Sprintf(":%d", cfg.port),
+		Handler:      app.routes(),
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
 
-		w.Header().Set("Content-Type", "application/json") // Header 설정
-		w.WriteHeader(http.StatusOK)                       // 응답상태 설정
-		w.Write(js)                                        // 응답 모델 추가
-	})
+	logger.Println("Starting server on port", cfg.port)
 
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", cfg.port), nil); err != nil {
+	err := srv.ListenAndServe()
+
+	if err != nil {
 		log.Println(err)
 	}
 }
