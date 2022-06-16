@@ -43,7 +43,7 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment (development|production")
-	flag.StringVar(&cfg.db.dsn, "dsn", "ehdgnl8940:ehdgnl8940!@tcp(52.12.181.219:3306)/Wolf", "Mysql Connection String")
+	flag.StringVar(&cfg.db.dsn, "dsn", "ehdgnl8940:ehdgnl8940!@/Wolf", "Mysql Connection String")
 	flag.Parse()
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
