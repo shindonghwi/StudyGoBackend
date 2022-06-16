@@ -80,7 +80,7 @@ func main() {
 
 func openDB(cfg config) (*sql.DB, error) {
 	println(cfg.db.dsn)
-	db, err := sql.Open("mysql", cfg.db.dsn)
+	db, err := sql.Open("mysql", "ehdgnl8940:ehdgnl8940!@tcp(52.12.181.219:3306)/Wolf")
 
 	if err != nil {
 		return nil, err
