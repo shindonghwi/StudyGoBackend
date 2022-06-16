@@ -11,6 +11,7 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 )
 
@@ -79,8 +80,7 @@ func main() {
 }
 
 func openDB(cfg config) (*sql.DB, error) {
-	println(cfg.db.dsn)
-	db, err := sql.Open("mysql", "ehdgnl8940:ehdgnl8940!@tcp(52.12.181.219:3306)/Wolf")
+	db, err := sql.Open("mysql", cfg.db.dsn)
 
 	if err != nil {
 		return nil, err
