@@ -79,6 +79,7 @@ func main() {
 }
 
 func openDB(cfg config) (*sql.DB, error) {
+	println(cfg.db.dsn)
 	db, err := sql.Open("mysql", cfg.db.dsn)
 
 	if err != nil {
