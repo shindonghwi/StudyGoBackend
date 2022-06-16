@@ -15,20 +15,20 @@ func (m *DBModel) Get(id int) (*Movie, error) {
 
 	defer cancel()
 
-	query := `select * from Movie where id = $1`
+	query := `select idx, id, title, description, releaseData, runtime, rating, mpaRating, created_at, updated_at from Movie where id = $1`
 
 	row := m.DB.QueryRowContext(ctx, query, id)
 
 	var movie Movie
 
 	err := row.Scan(
+		&movie.IDX,
 		&movie.ID,
 		&movie.Title,
 		&movie.Description,
-		&movie.Year,
 		&movie.ReleaseDate,
-		&movie.Rating,
 		&movie.Runtime,
+		&movie.Rating,
 		&movie.MPAARating,
 		&movie.CreatedAt,
 		&movie.UpdatedAt,

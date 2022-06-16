@@ -16,10 +16,10 @@ func NewModels(db *sql.DB) Models {
 }
 
 type Movie struct {
+	IDX         int          `json:"idx"`
 	ID          int          `json:"id"`
 	Title       string       `json:"title"`
 	Description string       `json:"description"`
-	Year        int          `json:"year"`
 	ReleaseDate time.Time    `json:"release_date"`
 	Runtime     int          `json:"runtime"`
 	Rating      int          `json:"rating"`
