@@ -32,6 +32,7 @@ type AppStatus struct {
 type application struct {
 	config config
 	logger *log.Logger
+	models models.Models
 }
 
 func main() {
@@ -43,10 +44,12 @@ func main() {
 	flag.Parse()
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
+	db, err := sql.Open("mysql", "ehdgnl8940:ehdgnl8940!@tcp(52.12.181.219:3306)/Wolf")
 
 	app := &application{
 		config: cfg,
 		logger: logger,
+		models: models.NewModels(db),
 	}
 
 	app.routes()
@@ -61,38 +64,16 @@ func main() {
 
 	logger.Println("Starting server on port", cfg.port)
 
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 
 	if err != nil {
 		log.Println(err)
 	}
 
-	db, err := sql.Open("mysql", "ehdgnl8940:ehdgnl8940!@tcp(52.12.181.219:3306)/Wolf")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	var movie models.Movie
-	rows, err := db.Query("SELECT * FROM Movie")
-
-	for rows.Next() {
-		err := rows.Scan(
-			&movie.ID,
-			&movie.Title,
-			&movie.Description,
-			&movie.Year,
-			&movie.ReleaseDate,
-			&movie.Rating,
-			&movie.Runtime,
-			&movie.MPAARating,
-			&movie.CreatedAt,
-			&movie.UpdatedAt,
-		)
+	defer func(db *sql.DB) {
+		err := db.Close()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 		}
-		fmt.Println(movie)
-	}
+	}(db)
 }
