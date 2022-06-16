@@ -1,6 +1,8 @@
 package main
 
 import (
+	"backend/models"
+	"database/sql"
 	"flag" // flag는 cmd에서 옵션을 지정할 수 있는 방법 중의 하나임.
 	"fmt"
 	"log"
@@ -63,5 +65,34 @@ func main() {
 
 	if err != nil {
 		log.Println(err)
+	}
+
+	db, err := sql.Open("mysql", "ehdgnl8940:ehdgnl8940!@tcp(52.12.181.219:3306)/Wolf")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	var movie models.Movie
+	rows, err := db.Query("SELECT * FROM Movie")
+
+	for rows.Next() {
+		err := rows.Scan(
+			&movie.ID,
+			&movie.Title,
+			&movie.Description,
+			&movie.Year,
+			&movie.ReleaseDate,
+			&movie.Rating,
+			&movie.Runtime,
+			&movie.MPAARating,
+			&movie.CreatedAt,
+			&movie.UpdatedAt,
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(movie)
 	}
 }
