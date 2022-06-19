@@ -15,7 +15,7 @@ func (m *DBModel) Get(id int) (*Movie, error) {
 
 	defer cancel()
 
-	row := m.DB.QueryRow("select idx, id, title, description, releaseData, runtime, rating, mpaRating, created_at, updated_at from Movie where id = $1", id)
+	row := m.DB.QueryRow("select idx, id, title, description, releaseData, runtime, rating, mpaRating, created_at, updated_at from Movie where id = ?", id)
 
 	var movie Movie
 
