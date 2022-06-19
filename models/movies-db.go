@@ -33,6 +33,7 @@ func (m *DBModel) Get(id int) (*Movie, error) {
 	)
 
 	if err != nil {
+		println("Error: ", err.Error())
 		return nil, err
 	}
 
