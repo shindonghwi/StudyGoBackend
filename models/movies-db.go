@@ -11,13 +11,11 @@ type DBModel struct {
 }
 
 func (m *DBModel) Get(id int) (*Movie, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	_, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 
 	defer cancel()
 
-	query := `select idx, id, title, description, releaseData, runtime, rating, mpaRating, created_at, updated_at from Movie where id = $1`
-
-	row := m.DB.QueryRowContext(ctx, query, id)
+	row := m.DB.QueryRow("select idx, id, title, description, releaseData, runtime, rating, mpaRating, created_at, updated_at from Movie where id = $1", id)
 
 	var movie Movie
 
