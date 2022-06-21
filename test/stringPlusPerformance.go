@@ -29,7 +29,7 @@ func main() {
 func TestStringCombine1(str1 string, str2 string) (time.Duration, string) {
 	startTime := time.Now()
 	var tempStr string
-	for i := 0; i < 100000; i++ {
+	for i := 0; i < 10000; i++ {
 		tempStr += str1 + str2
 	}
 	elapsedTime := time.Since(startTime)
@@ -39,7 +39,7 @@ func TestStringCombine1(str1 string, str2 string) (time.Duration, string) {
 func TestStringCombine2(str1 string, str2 string) (time.Duration, []string) {
 	startTime := time.Now()
 	var myStringSet []string
-	for i := 0; i < 100000; i++ {
+	for i := 0; i < 10000; i++ {
 		myStringSet = append(myStringSet, str1)
 		myStringSet = append(myStringSet, str2)
 	}
