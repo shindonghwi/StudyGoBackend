@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -38,6 +39,8 @@ type application struct {
 }
 
 func main() {
+
+	runtime.GOMAXPROCS(runtime.NumCPU()) // 시스템 프로세서 환경에 따라서 사용할 CPU 코어 갯수 설정
 
 	var cfg config
 
